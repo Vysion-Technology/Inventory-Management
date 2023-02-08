@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-
+import swal from 'sweetalert2';
 
 // const Form = styled.form``;
 // const H4 = styled.h4``;
@@ -66,6 +66,13 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
             }
         }
         console.log("form submitted")
+        swal.fire({
+          icon:'success',
+          title:'Updated!',
+          text:`${client.itemCode} has been Updated successfully`,
+          showConfirmButton:false,
+          timer:1500,
+        })
         setClients(clients);
         setIsEditing(false);
 

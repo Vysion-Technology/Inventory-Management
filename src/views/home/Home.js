@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import swal from 'sweetalert2'
 import styled from 'styled-components';
 import EditPage from '../../layout/components/EditPage';
 import ListPage from '../../layout/components/ListPage';
@@ -23,7 +24,32 @@ function Home() {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleDelete=()=>{console.log("Delete called")};
+  const handleDelete=(id)=>{
+    console.log("rohit Delete function called ");
+    swal.fire({
+      title:'Sure you want to Delete item this?',
+      text:'Are you sure, you want to do this',
+      // showCancelButton: true,
+      // buttonsStyling:false,
+      showDenyButton:true,
+      denyButtonText:'No, Cancel',
+      confirmButtonText:'Yes, Delete item',
+      // customClass:'alert_button'
+      
+
+    }).then(result=>{
+        if(result.value){
+          const [client] = clients.filter(client=>client.id === id);
+          swal.fire({
+            icon:'success',
+            title:'Deleted!',
+            text:`${client.itemCode} has been deleted successfully`,
+            showConfirmButton:false,
+            timer:1500,
+          })
+        }
+    })
+  };
   const handleUpdate=()=>{console.log("handleUpdate called")};
   const handleEdit=(id)=>{
     const [client] = clients.filter(client=>client.id === id);
@@ -31,6 +57,7 @@ function Home() {
     setSelectedClient(client);
     setIsEditing(true);
   };
+
 
 
   return (
@@ -50,6 +77,7 @@ function Home() {
 
             />
             <ListPage
+                clients={clients}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
                 handleUpdate={handleUpdate}
