@@ -117,7 +117,7 @@ function ListPage({handleDelete,handleEdit,handleUpdate}) {
                             </Td>
                             <Td>
                                 <WrapButton>
-                                    <Button update >Update Quantity</Button>
+                                    <Button update onClick={()=>handleUpdate(item.id)} >Update Quantity</Button>
                                     <Button edit onClick={()=>handleEdit(item.id)} >Edit</Button>
                                     <Button delete onClick={()=>handleDelete(item.id)} >Delete</Button>
                                 </WrapButton>

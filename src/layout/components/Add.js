@@ -43,7 +43,8 @@ function Add({setIsAdding}) {
     const [itemQuantity,setItemQuantity] = useState('');
 
   const handleAdd = ()=>{
-
+    alert("Item Added");
+    setIsAdding(false);
   }
 
 
@@ -59,6 +60,7 @@ function Add({setIsAdding}) {
         // marginTop:"10px"
       }}
       noValidate
+      onSubmit={handleAdd}
       autoComplete="off"
     >
         <Box style={{display:"flex",justifyContent: 'center'}} >
@@ -68,6 +70,8 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='item Name'
             rows={8}
+            value={itemName}
+            onChange={(e)=>setItemName(e.target.value)}
             style={{ width:"45ch",margin:"15px",marginTop:"70px"}}
 
         />
@@ -77,6 +81,8 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='item code'
             rows={6}
+            value={itemCode}
+            onChange={(e)=>setItemCode(e.target.value)}
             style={{ width:"45ch",margin:"15px",marginTop:"70px"}}
 
         />
@@ -88,6 +94,8 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='item Price'
             rows={6}
+            value={itemPrice}
+            onChange={(e)=>setItemPrice(e.target.value)}
             style={{ width:"45ch",margin:"15px"}}
 
         />
@@ -97,6 +105,8 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='item Quantity'
             rows={6}
+            value={itemQuantity}
+            onChange={(e)=>setItemQuantity(e.target.value)}
             style={{ width:"45ch",margin:"15px"}}
 
         />
@@ -131,7 +141,7 @@ function Add({setIsAdding}) {
         </Box>
         <Box style={{display:"flex",justifyContent: 'flex-end'}} >
             <Button onClick={()=>setIsAdding(false)} >cancel</Button>
-            <Button primary >Add</Button>
+            <Button primary type="submit" >Add</Button>
         </Box>
     </Box>
   )
