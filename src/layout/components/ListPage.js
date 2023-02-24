@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import styled from 'styled-components';
 import SampleData from './SampleData';
 import Divider from '@mui/material/Divider';
+import { getProduct } from '../../services/Api';
 
 const Wrapper = styled.div`
   display:table;
@@ -68,8 +69,18 @@ const WrapButton = styled.div`
 
 
 function ListPage({handleDelete,handleEdit,handleUpdate}) {
-    console.log(SampleData);
+
+    // const dataProduct = getProduct();
+    // console.log(dataProduct);
+    // console.log(SampleData);
     const [data, setData] = useState([]);
+
+    useEffect(()=>{
+        const dataProduct = getProduct();
+        console.log(dataProduct);
+    },[])
+
+
     return (
         <Wrapper>
             {/* <Label> */}

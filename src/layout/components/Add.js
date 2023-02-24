@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import { addProduct } from '../../services/Api';
 
 
 const Button = styled.button`
@@ -34,23 +35,39 @@ const options = [
     }
   ];
 
+  const initialValue = {
+    itemName:'',
+    itemCode:'',
+    itemPrice:'',
+    itemQuantity:'',
+    category:'',
+  }
+
 
 function Add({setIsAdding}) {
 
-  const [itemCode,setItemCode] = useState('');
-    const [itemName,setItemName] = useState('');
-    const [itemPrice,setItemPrice] = useState('');
-    const [itemQuantity,setItemQuantity] = useState('');
+  // const [itemCode,setItemCode] = useState('');
+  //   const [itemName,setItemName] = useState('');
+  //   const [itemPrice,setItemPrice] = useState('');
+  //   const [itemQuantity,setItemQuantity] = useState('');
+  const [addItem,setAddItem] = useState(initialValue);
 
-  const handleAdd = ()=>{
+  const handleAdd = async()=>{
+    console.log(addItem);
+    const response = await addProduct(addItem);
+    if(!response) return console.log("response not found");
     alert("Item Added");
     setIsAdding(false);
   }
 
+  const InputValue = (e) =>{
+    setAddItem({...addItem,[e.target.name]:e.target.value})
+    console.log(addItem);
+  }
 
   return (
     <Box
-      component="form"
+      // component="form"
       sx={{
         marginTop:"15px",
         height: "556px",
@@ -60,7 +77,7 @@ function Add({setIsAdding}) {
         // marginTop:"10px"
       }}
       noValidate
-      onSubmit={handleAdd}
+      // onSubmit={handleAdd}
       autoComplete="off"
     >
         <Box style={{display:"flex",justifyContent: 'center'}} >
@@ -68,10 +85,11 @@ function Add({setIsAdding}) {
             id="outlined-basic" 
             label="item Name" 
             variant="outlined" 
+            name="itemName"
             placeholder='item Name'
             rows={8}
-            value={itemName}
-            onChange={(e)=>setItemName(e.target.value)}
+            // value={itemName}
+            onChange={(e)=>InputValue(e)}
             style={{ width:"45ch",margin:"15px",marginTop:"70px"}}
 
         />
@@ -80,9 +98,10 @@ function Add({setIsAdding}) {
             label="item Code" 
             variant="outlined" 
             placeholder='item code'
+            name="itemCode"
             rows={6}
-            value={itemCode}
-            onChange={(e)=>setItemCode(e.target.value)}
+            // value={itemCode}
+            onChange={(e)=>InputValue(e)}
             style={{ width:"45ch",margin:"15px",marginTop:"70px"}}
 
         />
@@ -93,9 +112,10 @@ function Add({setIsAdding}) {
             label="item Price" 
             variant="outlined" 
             placeholder='item Price'
+            name="itemPrice"
             rows={6}
-            value={itemPrice}
-            onChange={(e)=>setItemPrice(e.target.value)}
+            // value={itemPrice}
+            onChange={(e)=>InputValue(e)}
             style={{ width:"45ch",margin:"15px"}}
 
         />
@@ -104,9 +124,10 @@ function Add({setIsAdding}) {
             label="item Quantity" 
             variant="outlined" 
             placeholder='item Quantity'
+            name="itemQuantity"
             rows={6}
-            value={itemQuantity}
-            onChange={(e)=>setItemQuantity(e.target.value)}
+            // value={itemQuantity}
+            onChange={(e)=>InputValue(e)}
             style={{ width:"45ch",margin:"15px"}}
 
         />
@@ -134,6 +155,8 @@ function Add({setIsAdding}) {
             label="Category" 
             variant="outlined" 
             placeholder='Category'
+            name = "category"
+            onChange={(e)=>InputValue(e)}
             rows={6}
             style={{ width:"45ch",margin:"15px"}}
 
@@ -141,7 +164,7 @@ function Add({setIsAdding}) {
         </Box>
         <Box style={{display:"flex",justifyContent: 'flex-end'}} >
             <Button onClick={()=>setIsAdding(false)} >cancel</Button>
-            <Button primary type="submit" >Add</Button>
+            <Button primary onClick={()=>handleAdd()} >Add</Button>
         </Box>
     </Box>
   )
