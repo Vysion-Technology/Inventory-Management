@@ -3,12 +3,7 @@ import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import swal from 'sweetalert2';
 
-// const Form = styled.form``;
-// const H4 = styled.h4``;
-// const Label = styled.label``;
-// const Input = styled.input``;
 
 const Button = styled.button`
 display:flex;
@@ -40,48 +35,17 @@ const options = [
   ];
 
 
-function Edit({clients,setClients,selectedClient,setIsEditing}) {
-  console.log(clients.length);
-    console.log(selectedClient);
-    const id = selectedClient._id;
-    console.log(id);
-    const [itemCode,setItemCode] = useState(selectedClient.itemCode);
-    const [itemName,setItemName] = useState(selectedClient.itemName);
-    const [itemPrice,setItemPrice] = useState(selectedClient.itemPrice);
-    const [itemQuantity,setItemQuantity] = useState(selectedClient.itemQuantity);
-    const [category,setCategory] = useState(selectedClient.category);
+function Add({setIsAdding}) {
 
-    const handleEdit = (e)=> {
-        
-        e.preventDefault();
-        const client = {
-            itemCode,
-            itemPrice,
-            itemQuantity,
-            itemName,
-            category
-        }
-        console.log(client);
-        // for(let i=0;i<clients.length;i++){
-        //     if(clients[i].id===id){
-        //         clients.splice(i,1,client);
-        //         break;
-        //     }
-        // }
-        console.log("form submitted")
-        swal.fire({
-          icon:'success',
-          title:'Updated!',
-          text:`${client.itemCode} has been Updated successfully`,
-          showConfirmButton:false,
-          timer:1500,
-        })
-        
-        setClients(clients);
-        console.log(clients);
-        setIsEditing(false);
+  const [itemCode,setItemCode] = useState('');
+    const [itemName,setItemName] = useState('');
+    const [itemPrice,setItemPrice] = useState('');
+    const [itemQuantity,setItemQuantity] = useState('');
 
-    }
+  const handleAdd = ()=>{
+    alert("Item Added");
+    setIsAdding(false);
+  }
 
 
   return (
@@ -96,8 +60,8 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
         // marginTop:"10px"
       }}
       noValidate
+      onSubmit={handleAdd}
       autoComplete="off"
-      onSubmit={handleEdit}
     >
         <Box style={{display:"flex",justifyContent: 'center'}} >
         <TextField 
@@ -105,9 +69,9 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
             label="item Name" 
             variant="outlined" 
             placeholder='item Name'
+            rows={8}
             value={itemName}
             onChange={(e)=>setItemName(e.target.value)}
-            rows={8}
             style={{ width:"45ch",margin:"15px",marginTop:"70px"}}
 
         />
@@ -116,9 +80,9 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
             label="item Code" 
             variant="outlined" 
             placeholder='item code'
+            rows={6}
             value={itemCode}
             onChange={(e)=>setItemCode(e.target.value)}
-            rows={6}
             style={{ width:"45ch",margin:"15px",marginTop:"70px"}}
 
         />
@@ -129,9 +93,9 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
             label="item Price" 
             variant="outlined" 
             placeholder='item Price'
+            rows={6}
             value={itemPrice}
             onChange={(e)=>setItemPrice(e.target.value)}
-            rows={6}
             style={{ width:"45ch",margin:"15px"}}
 
         />
@@ -140,9 +104,9 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
             label="item Quantity" 
             variant="outlined" 
             placeholder='item Quantity'
+            rows={6}
             value={itemQuantity}
             onChange={(e)=>setItemQuantity(e.target.value)}
-            rows={6}
             style={{ width:"45ch",margin:"15px"}}
 
         />
@@ -171,18 +135,16 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
             variant="outlined" 
             placeholder='Category'
             rows={6}
-            value={category}
-            onChange={(e)=>setCategory(e.target.value)}
             style={{ width:"45ch",margin:"15px"}}
 
         />
         </Box>
         <Box style={{display:"flex",justifyContent: 'flex-end'}} >
-            <Button onClick={()=>setIsEditing(false)} >cancel</Button>
-            <Button primary type="submit" >Edit</Button>
+            <Button onClick={()=>setIsAdding(false)} >cancel</Button>
+            <Button primary type="submit" >Add</Button>
         </Box>
     </Box>
   )
 }
 
-export default Edit;
+export default Add;
