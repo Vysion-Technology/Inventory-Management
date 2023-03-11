@@ -27,11 +27,25 @@ export const productUpload = async(req,res)=>{
 
 export const getProduct = async(req,res)=>{
     try{
+        
         const data = await Products.find();
         console.log(data);
         res.status(200).json(data);
     }catch (error){
         console.log("error while getting product",error.message);
         res.status(200).send("server error");
+    }
+}
+
+export const upDateProduct = async(req,res)=>{
+    try{
+        const product = await Products.findByIdAndUpdate(req.params.id,req.body,{new:true});
+        if(!product){
+            res.status(404).send("product not found");
+        }
+        res.status(200).json({message:"product updated successfully"})
+    }catch (error){
+        console.log("error while updating product",error.message);
+        res.status(500).send("server error");
     }
 }

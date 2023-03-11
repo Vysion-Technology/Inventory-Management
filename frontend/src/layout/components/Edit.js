@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import swal from 'sweetalert2';
-
+import axios from 'axios';
 // const Form = styled.form``;
 // const H4 = styled.h4``;
 // const Label = styled.label``;
@@ -39,10 +39,10 @@ const options = [
     }
   ];
 
-
+  const url = 'http://localhost:8000'
 function Edit({clients,setClients,selectedClient,setIsEditing}) {
-  console.log(clients.length);
-    console.log(selectedClient);
+  // console.log(clients.length);
+  //   console.log(selectedClient);
     const id = selectedClient._id;
     console.log(id);
     const [itemCode,setItemCode] = useState(selectedClient.itemCode);
@@ -50,6 +50,18 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
     const [itemPrice,setItemPrice] = useState(selectedClient.itemPrice);
     const [itemQuantity,setItemQuantity] = useState(selectedClient.itemQuantity);
     const [category,setCategory] = useState(selectedClient.category);
+
+    const updateItem = async(id,itemCode,itemName,itemPrice,itemQuantity,category)=>{
+      try {
+        const response = await axios.put(`${url}/products/${id}`, {
+          itemCode,itemName,itemPrice,itemQuantity,category
+        });
+        console.log(response.data); // Product updated successfully
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
 
     const handleEdit = (e)=> {
         
@@ -61,13 +73,15 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
             itemName,
             category
         }
-        console.log(client);
+        
+        updateItem(id,itemCode,itemName,itemPrice,itemQuantity,category);
         // for(let i=0;i<clients.length;i++){
         //     if(clients[i].id===id){
         //         clients.splice(i,1,client);
         //         break;
         //     }
         // }
+        console.log(client);
         console.log("form submitted")
         swal.fire({
           icon:'success',
@@ -77,8 +91,8 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
           timer:1500,
         })
         
-        setClients(clients);
-        console.log(clients);
+        // setClients(clients);
+        // console.log(clients);
         setIsEditing(false);
 
     }
