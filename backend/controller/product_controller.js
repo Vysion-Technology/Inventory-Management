@@ -27,10 +27,11 @@ export const productUpload = async(req,res)=>{
 
 export const getProduct = async(req,res)=>{
     try{
-        const data = await Products.find({});
+        const data = await Products.find();
         console.log(data);
-        res.status(200).send(data);
+        res.status(200).json(data);
     }catch (error){
         console.log("error while getting product",error.message);
+        res.status(200).send("server error");
     }
 }
