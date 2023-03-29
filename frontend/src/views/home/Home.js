@@ -1,9 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import swal from 'sweetalert2'
 import styled from 'styled-components';
 import EditPage from '../../layout/components/EditPage';
 import ListPage from '../../layout/components/ListPage';
-import SampleData from '../../layout/components/SampleData';
 import Add from '../../layout/components/Add';
 import Edit from '../../layout/components/Edit';
 import Update from '../../layout/components/Update';
@@ -12,7 +11,10 @@ import { RiCloseLine } from 'react-icons/ri';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Box, IconButton } from '@mui/material';
 // import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-import {getProduct } from '../../services/Api'
+// import { getProduct } from '../../services/Api'
+import { useDispatch,useSelector } from 'react-redux';
+import {getItems as listItems} from '../../redux/action/itemAction'
+
 
 
 
@@ -25,7 +27,7 @@ const List = styled.div`
     border-bottom: ${props => props.header ? "1px solid #ddd" : "none"};
 `
 
-const useStyle =  makeStyles({
+const useStyle = makeStyles({
   box: {
     height: '174px',
     width: '545px'
@@ -39,89 +41,63 @@ const useStyle =  makeStyles({
   },
   bottom: {
     display: "flex",
-    justifyContent:"space-evenly",
-    alignItems:"center",
-    margin:"5px",
-    padding:"20px",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    margin: "5px",
+    padding: "20px",
   },
-  ButtonAdd:{
-    width:"180px",
-    height:"44px",
-    margin:"10px",
-    textDecoration:"none",
+  ButtonAdd: {
+    width: "180px",
+    height: "44px",
+    margin: "10px",
+    textDecoration: "none",
     // background:"#338FEB",
     // textTransform: "none",
     // color: "#2878f0",
   },
-  text:{
-    fontWeight:"600",
-    fontSize:"1rem",
+  text: {
+    fontWeight: "600",
+    fontSize: "1rem",
 
   }
 })
-
 const url = 'http://localhost:8000'
 function Home() {
 
   const [data, setData] = useState([]);
 
-    useEffect(()=>{
-        // const dataProduct = getProduct();
-        // setData(dataProduct);
-        // console.log(dataProduct);
- 
-        async function fetchData(){
-            const res = await axios.get(`${url}/getProducts`);
-            console.log(res);
-            setData(res.data);
-        }
-        fetchData();
-    },[])
-  const [clients, setClients] = useState(data);
+  const {items} = useSelector(state=>state.getItems);
+  // console.log(items);
+  // setData(items);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+      dispatch(listItems());
+      setData(items);
+  }, [])
+//   useEffect(() => {
+//     setData(items);
+// }, [])
+  const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [isUpdate, setUpdate] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   // Open dialog box to update the quantity
-    // console.log(data);
+  // console.log(data);
   const [open, setOpen] = useState(false);
   const [additem, setAddItem] = useState(false);
 
 
-  const handleDelete = (id) => {
-    console.log("rohit Delete function called ");
-    swal.fire({
-      title: 'Sure you want to Delete item this?',
-      text: 'Are you sure, you want to do this',
-      // showCancelButton: true,
-      // buttonsStyling:false,
-      showDenyButton: true,
-      denyButtonText: 'No, Cancel',
-      confirmButtonText: 'Yes, Delete item',
-      // customClass:'alert_button'
-
-
-    }).then(result => {
-      if (result.value) {
-        const [client] = clients.filter(client => client.id === id);
-        swal.fire({
-          icon: 'success',
-          title: 'Deleted!',
-          text: `${client.itemCode} has been deleted successfully`,
-          showConfirmButton: false,
-          timer: 1500,
-        })
-      }
-    })
-  };
+  
 
   const handleUpdate = (id) => {
-    const [client] = clients.filter(client => client._id === id);
+    // const [client] = clients.filter(client => client._id === id);
     setOpen(true);
-    console.log(client);
-    setSelectedClient(client);
-    setUpdate(true);
+    console.log(id);
+    setSelectedClient(id);
+    setIsUpdate(true);
   };
 
 
@@ -131,7 +107,7 @@ function Home() {
     console.log(client[0]);
     setSelectedClient(client[0]);
     setIsEditing(true);
-  }; 
+  };
 
   // handleClickOpen = () => {
   //   setOpen(true);
@@ -156,13 +132,14 @@ function Home() {
           <EditPage
             // clients={clients}
             setIsAdding={setIsAdding}
-          />
-          <ListPage
-            data={data}
-            handleDelete={handleDelete}
             handleEdit={handleEdit}
             handleUpdate={handleUpdate}
           />
+          {/* <ListPage
+            // handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            handleUpdate={handleUpdate}
+          /> */}
         </>
       )}
       {isAdding && (
@@ -174,9 +151,9 @@ function Home() {
       {isEditing && (
         <Edit
           setIsEditing={setIsEditing}
-          clients={data}
+          // clients={data}
           selectedClient={selectedClient}
-          setClients={setClients}
+          // setClients={setClients}
         />
       )}
       {isUpdate && (
@@ -185,11 +162,11 @@ function Home() {
           handleClose={handleClose}
           additem={additem}
           setAddItem={setAddItem}
-          data={data}
-          selectedClient={selectedClient}
-          setClients={setClients}
+        // data={data}
+        selectedClient={selectedClient}
+        // setClients={setClients}
         />
-        
+
       )}
 
     </Wrapper>

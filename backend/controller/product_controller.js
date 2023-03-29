@@ -49,3 +49,15 @@ export const upDateProduct = async(req,res)=>{
         res.status(500).send("server error");
     }
 }
+
+
+export const deleteProduct = async(req,res)=>{
+    const Id = req.params.id;
+    try{
+        await Products.findByIdAndDelete(Id);
+        res.status(200).json({message:"product deleted successfully"})
+    }catch (error){
+        console.log("error while deleting product",error.message);
+        res.status(500).send("server error");
+    }
+}

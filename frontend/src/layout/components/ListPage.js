@@ -4,6 +4,8 @@ import SampleData from './SampleData';
 import Divider from '@mui/material/Divider';
 import { getProduct } from '../../services/Api';
 import axios from 'axios';
+import {useSelector } from 'react-redux';
+
 
 const Wrapper = styled.div`
   display:table;
@@ -71,22 +73,56 @@ const WrapButton = styled.div`
 
 const url = 'http://localhost:8000'
 
-function ListPage({handleDelete,handleEdit,handleUpdate}) {
-    console.log(SampleData);
-    const [data, setData] = useState([]);
+function ListPage({handleEdit,handleUpdate,data}) {
+    console.log(data);
+    // const [data, setData] = useState([]);
 
-    useEffect(()=>{
-        // const dataProduct = getProduct();
-        // setData(dataProduct);
-        // console.log(dataProduct);
+    // const {items} = useSelector(state=>state.getItems);
+    // console.log(items);
+    // useEffect(()=>{ 
+    //     setData(items);
+    // },[items])
 
-        async function fetchData(){
-            const res = await axios.get(`${url}/getProducts`);
-            console.log(res);
-            setData(res.data);
+
+    const handleDelete = async (ProductId) => {
+        console.log("rohit Delete function called: ", ProductId);
+        const index = data.findIndex(item=>item._id===ProductId);
+        console.log(index);
+        try {
+          await axios.delete(`${url}/products/${ProductId}`);
+          
+        } catch (error) {
+          console.log("error while calling delete api", error)
         }
-        fetchData();
-    },[])
+        const updatedData = [...data];
+        updatedData.splice(index,1)
+        setData(updatedData);
+        // swal.fire({
+        //   title: 'Sure you want to Delete item this?',
+        //   text: 'Are you sure, you want to do this',
+        //   // showCancelButton: true,
+        //   // buttonsStyling:false,
+        //   showDenyButton: true,
+        //   denyButtonText: 'No, Cancel',
+        //   confirmButtonText: 'Yes, Delete item',
+        //   // customClass:'alert_button'
+    
+    
+        // }).then(result => {
+        //   if (result.value) {
+        //     const [client] = clients.filter(client => client.id === id);
+        //     swal.fire({
+        //       icon: 'success',
+        //       title: 'Deleted!',
+        //       text: `Item has been deleted successfully`,
+        //       showConfirmButton: false,
+        //       timer: 1500,
+        //     })
+        //   }
+        // })
+        console.log("Item deleted successfully");
+      };
+
 
 
     return (

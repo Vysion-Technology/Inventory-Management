@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-
-
+import {addProduct} from '../../services/Api'
+import swal from 'sweetalert2';
 const Button = styled.button`
 display:flex;
 align-items:center;
@@ -34,16 +34,37 @@ const options = [
     }
   ];
 
+  const itemInitialValue = {
+    itemCode:'',
+    itemName:'',
+    itemPrice:'',
+    itemQuantity:'',
+    category:''
+  }
 
 function Add({setIsAdding}) {
 
-  const [itemCode,setItemCode] = useState('');
-    const [itemName,setItemName] = useState('');
-    const [itemPrice,setItemPrice] = useState('');
-    const [itemQuantity,setItemQuantity] = useState('');
+  const [addItem,setAddItem] = useState(itemInitialValue);
 
-  const handleAdd = ()=>{
-    alert("Item Added");
+  const onInputChange = (e)=>{
+    setAddItem({...addItem,[e.target.name]:e.target.value});
+    console.log(addItem);
+  }
+
+  const handleAdd = async()=>{
+    // alert("Item Added");
+    const response = await addProduct(addItem);
+    if(!response){
+      return console.log('error while adding product');
+    }
+    swal.fire({
+      icon:'success',
+      title:'Added',
+      text:`Record has been Added to Database successfully`,
+      showConfirmButton:false,
+      timer:1500,
+    })
+    console.log(response);
     setIsAdding(false);
   }
 
@@ -70,8 +91,8 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='item Name'
             rows={8}
-            value={itemName}
-            onChange={(e)=>setItemName(e.target.value)}
+            name="itemName"
+            onChange={(e)=>onInputChange(e)}
             style={{ width:"45ch",margin:"15px",marginTop:"70px"}}
 
         />
@@ -81,8 +102,9 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='item code'
             rows={6}
-            value={itemCode}
-            onChange={(e)=>setItemCode(e.target.value)}
+            name="itemCode"
+            // value={itemCode}
+            onChange={(e)=>onInputChange(e)}
             style={{ width:"45ch",margin:"15px",marginTop:"70px"}}
 
         />
@@ -94,8 +116,9 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='item Price'
             rows={6}
-            value={itemPrice}
-            onChange={(e)=>setItemPrice(e.target.value)}
+            name="itemPrice"
+            // value={itemPrice}
+            onChange={(e)=>onInputChange(e)}
             style={{ width:"45ch",margin:"15px"}}
 
         />
@@ -105,8 +128,9 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='item Quantity'
             rows={6}
-            value={itemQuantity}
-            onChange={(e)=>setItemQuantity(e.target.value)}
+            name="itemQuantity"
+            // value={itemQuantity}
+            onChange={(e)=>onInputChange(e)}
             style={{ width:"45ch",margin:"15px"}}
 
         />
@@ -135,6 +159,8 @@ function Add({setIsAdding}) {
             variant="outlined" 
             placeholder='Category'
             rows={6}
+            name="category"
+            onChange={(e)=>onInputChange(e)}
             style={{ width:"45ch",margin:"15px"}}
 
         />

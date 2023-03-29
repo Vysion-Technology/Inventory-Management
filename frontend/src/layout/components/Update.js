@@ -1,9 +1,10 @@
-import react, { useState } from 'react';
+import React,{useState,useEffect} from 'react';
+import {useSelector } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import { RiCloseLine } from 'react-icons/ri';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Box, IconButton, TextField } from '@mui/material';
 import AddQuantity from './AddQuantity';
-
+import axios from 'axios';
 
 const useStyle = makeStyles({
     box: {
@@ -56,26 +57,49 @@ const useStyle = makeStyles({
     }
 })
 
-
-const Update = ({ open, handleClose, setAddItem, additem,clients,setClients,selectedClient }) => {
+// , setAddItem, additem,clients,setClients,selectedClient 
+const url = 'http://localhost:8000'
+const Update = ({ open, handleClose, setAddItem, additem, selectedClient}) => {
     const classes = useStyle();
-console.log("Update Quantity",selectedClient);
-    const [addvalue,setAddValue] = useState(selectedClient.quantity)
-    // console.log("Update Quantity",addvalue);
+
+    const [data, setData] = useState([]);
+    const {items} = useSelector(state=>state.getItems);
+    // console.log(items);
+    useEffect(()=>{ 
+        setData(items);
+    },[setData, items])
+    const index = data.findIndex(item=>item._id==selectedClient);
+    const valueData = data[index];
+// console.log("Update Quantity",selectedClient);
+    const [addvalue,setAddValue] = useState(null)
+    // console.log("Update Quantity",valueData.itemQuantity);
     // const [additem, setAddItem] = useState(false);
     const hanldeAdd = (e) => {
         // e.preventDefault();
         // selectedClient.quantity=addvalue;
         // setClients(clients)
+        setAddValue(valueData.itemQuantity)
         // console.log("Update Quantity",clients);
         setAddItem(true);
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        selectedClient.quantity=addvalue;
-        setClients(clients)
+        // selectedClient.quantity=addvalue;
+        valueData.itemQuantity=addvalue;
+        console.log(valueData);
+        try {
+            const response = axios.put(`${url}/products/${selectedClient}`, {
+                valueData
+                // itemQuantity
+            });
+            console.log(response.data); // Product updated successfully
+          } catch (err) {
+            console.error(err);
+          }
+
+        // setClients(clients)
         console.log("form submitted")
-        console.log("Update Quantity",clients);
+        // console.log("Update Quantity",clients);
         setAddItem(true);
     }
     // const handleaddClose = () => {
@@ -99,7 +123,7 @@ console.log("Update Quantity",selectedClient);
                             >
                                 Choose what you want to do?
                             </Typography>
-                            <IconButton><RiCloseLine /></IconButton>
+                            <IconButton onClick={handleClose} ><RiCloseLine /></IconButton>
                         </Box>
                         <Box className={classes.bottom} >
                             <Button variant="contained" onClick={handleClose}
@@ -142,7 +166,8 @@ console.log("Update Quantity",selectedClient);
                             <Button variant="contained"
                                 // style={{margin:"10px",width:"180px",height:"44px",borderRadius:"8px"}} 
                                 className={classes.ButtonAdd}
-                                onClick={handleClose} type="submit" >Yes $variable</Button>
+                                // onClick={handleClose} 
+                                type="submit" >Yes $variable</Button>
                         </Box>
                     </Box>
 

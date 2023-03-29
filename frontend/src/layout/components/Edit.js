@@ -1,10 +1,12 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
+import {useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import swal from 'sweetalert2';
 import axios from 'axios';
+
 // const Form = styled.form``;
 // const H4 = styled.h4``;
 // const Label = styled.label``;
@@ -40,8 +42,18 @@ const options = [
   ];
 
   const url = 'http://localhost:8000'
-function Edit({clients,setClients,selectedClient,setIsEditing}) {
-  // console.log(clients.length);
+function Edit({selectedClient,setIsEditing}) {
+  const [data, setData] = useState([]);
+  const {items} = useSelector(state=>state.getItems);
+    // console.log(items);
+    useEffect(()=>{ 
+        setData(items);
+  },[items])
+
+
+
+
+  // console.log(data.length);
   //   console.log(selectedClient);
     const id = selectedClient._id;
     console.log(id);
@@ -50,6 +62,9 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
     const [itemPrice,setItemPrice] = useState(selectedClient.itemPrice);
     const [itemQuantity,setItemQuantity] = useState(selectedClient.itemQuantity);
     const [category,setCategory] = useState(selectedClient.category);
+
+    const index = data.findIndex(item=>item._id===id);
+    // console.log(index);
 
     const updateItem = async(id,itemCode,itemName,itemPrice,itemQuantity,category)=>{
       try {
@@ -67,21 +82,19 @@ function Edit({clients,setClients,selectedClient,setIsEditing}) {
         
         e.preventDefault();
         const client = {
-            itemCode,
-            itemPrice,
-            itemQuantity,
-            itemName,
-            category
+            itemCode:itemCode,
+            itemPrice:itemPrice,
+            itemQuantity:itemQuantity,
+            itemName:itemName,
+            category:category
         }
         
         updateItem(id,itemCode,itemName,itemPrice,itemQuantity,category);
-        // for(let i=0;i<clients.length;i++){
-        //     if(clients[i].id===id){
-        //         clients.splice(i,1,client);
-        //         break;
-        //     }
-        // }
-        console.log(client);
+
+        const editData = [...data];
+        editData[index] = client;
+        setData(editData);
+        console.log(data);
         console.log("form submitted")
         swal.fire({
           icon:'success',
