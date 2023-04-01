@@ -4,8 +4,8 @@ import SampleData from './SampleData';
 import Divider from '@mui/material/Divider';
 import { getProduct } from '../../services/Api';
 import axios from 'axios';
-import {useSelector } from 'react-redux';
-import {addUseProduct} from '../../services/Api'
+import {useDispatch, useSelector } from 'react-redux';
+import {usedItem as listItems} from '../../redux/action/itemAction'
 
 const Wrapper = styled.div`
   display:table;
@@ -71,64 +71,16 @@ const WrapButton = styled.div`
     width:253px;
 `
 
-const url = 'http://localhost:8000'
+function Report() {
 
-function ListPage({handleEdit,handleUpdate,data}) {
-    console.log(data);
-    const [record, setRecord] = useState([]);
-    // const {items} = useSelector(state=>state.getItems);
-    // console.log(items);
+    const [data,setData] = useState([]);
+    const {items} = useSelector(state=>state.usedItem);
+    console.log(items)
+    const dispatch = useDispatch()
     useEffect(()=>{ 
-        setRecord(data);
-    },[data])
-    console.log(record);
-
-    const handleDelete = async (ProductId) => {
-        console.log("rohit Delete function called: ", ProductId);
-        const index = record.findIndex(item=>item._id===ProductId);
-        console.log(index);
-        console.log(record[index]);
-        try {
-          await axios.delete(`${url}/products/${ProductId}`);
-          
-        } catch (error) {
-          console.log("error while calling delete api", error)
-        }
-        const updatedData = [...record];
-        // console.log(updatedData[index]);
-        const response = await addUseProduct(record[index]);
-        if(!response){
-            return console.log('error while adding product');
-        }
-        updatedData.splice(index,1)
-        setRecord(updatedData);
-        // swal.fire({
-        //   title: 'Sure you want to Delete item this?',
-        //   text: 'Are you sure, you want to do this',
-        //   // showCancelButton: true,
-        //   // buttonsStyling:false,
-        //   showDenyButton: true,
-        //   denyButtonText: 'No, Cancel',
-        //   confirmButtonText: 'Yes, Delete item',
-        //   // customClass:'alert_button'
-    
-    
-        // }).then(result => {
-        //   if (result.value) {
-        //     const [client] = clients.filter(client => client.id === id);
-        //     swal.fire({
-        //       icon: 'success',
-        //       title: 'Deleted!',
-        //       text: `Item has been deleted successfully`,
-        //       showConfirmButton: false,
-        //       timer: 1500,
-        //     })
-        //   }
-        // })
-        console.log("Item deleted successfully");
-      };
-
-
+        dispatch(listItems())
+        setData(items)
+    },[])
 
     return (
         <Wrapper>
@@ -144,20 +96,20 @@ function ListPage({handleEdit,handleUpdate,data}) {
                         item Name
                     </Td>
                     <Td>
-                        Quantity
+                        Quantity Used
                     </Td>
                     <Td>
-                        Price
+                        Total Price
                     </Td>
                     <Td>
-                        Action
+                        Date
                     </Td>
                 </Tr>
 
             {/* </Label> */}
             <Divider variant="fullWidth" />
             {
-                record.map((item) =>
+                data.map((item) =>
                     // <Label>
                         <Tr key={item._id} >
                             <Td primary >
@@ -173,13 +125,13 @@ function ListPage({handleEdit,handleUpdate,data}) {
                                 {item.itemQuantity}
                             </Td>
                             <Td>
-                                {item.itemPrice}
+                                {item.itemPrice*item.itemQuantity}
                             </Td>
                             <Td>
                                 <WrapButton>
-                                    <Button update onClick={()=>handleUpdate(item._id)} >Update Quantity</Button>
-                                    <Button edit onClick={()=>handleEdit(item._id)} >Edit</Button>
-                                    <Button delete onClick={()=>handleDelete(item._id)} >Delete</Button>
+                                    <Button update onClick={()=>handleUpdate(item._id)} >Date</Button>
+                                    <Button edit onClick={()=>handleEdit(item._id)} >Time</Button>
+                                    
                                 </WrapButton>
                             </Td>
                         </Tr>
@@ -189,4 +141,4 @@ function ListPage({handleEdit,handleUpdate,data}) {
 
     );
 }
-export default ListPage;
+export default Report;

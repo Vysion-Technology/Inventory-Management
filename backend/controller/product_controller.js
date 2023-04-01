@@ -1,5 +1,6 @@
 import express from 'express';
 import Products from '../model/productSchema.js';
+
 // import fs from
 export const productUpload = async(req,res)=>{
     try{
@@ -24,6 +25,9 @@ export const productUpload = async(req,res)=>{
         console.log("error while inserting data to database....",error.message);
     }
 }
+
+
+
 
 export const getProduct = async(req,res)=>{
     try{

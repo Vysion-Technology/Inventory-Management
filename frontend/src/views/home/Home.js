@@ -14,6 +14,7 @@ import axios from 'axios';
 // import { getProduct } from '../../services/Api'
 import { useDispatch,useSelector } from 'react-redux';
 import {getItems as listItems} from '../../redux/action/itemAction'
+import {usedItem as listUseItems} from '../../redux/action/itemAction'
 
 
 
@@ -67,7 +68,8 @@ function Home() {
   const [data, setData] = useState([]);
 
   const {items} = useSelector(state=>state.getItems);
-  // console.log(items);
+  // const {useItems} = useSelector(state=>state.usedItem);
+  // console.log(useItems);
   // setData(items);
   const dispatch = useDispatch()
 
@@ -75,6 +77,14 @@ function Home() {
       dispatch(listItems());
       setData(items);
   }, [])
+
+  
+    // // const dispatch = useDispatch()
+    // useEffect(()=>{ 
+    //     dispatch(listUseItems())
+    //     // setUseData(items)
+    // },[])
+
 //   useEffect(() => {
 //     setData(items);
 // }, [])

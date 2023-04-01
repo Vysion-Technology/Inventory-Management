@@ -13,3 +13,13 @@ export const getItems = () => async(dispatch)=>{
         dispatch({type: action.GET_PRODUCT_FAIL, payload:error.message});
     }
 };
+
+export const usedItem = () => async(dispatch)=>{
+    try{
+        const { data } = await axios.get(`${url}/getUseProducts`);
+        console.log(data); 
+        dispatch({type: action.GET_USE_PRODUCT_SUCCESS, payload: data })
+    }catch (error){
+        dispatch({type: action.GET_USE_PRODUCT_FAIL, payload:error.message});
+    }
+};

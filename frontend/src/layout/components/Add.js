@@ -34,17 +34,17 @@ const options = [
     }
   ];
 
-  const itemInitialValue = {
-    itemCode:'',
-    itemName:'',
-    itemPrice:'',
-    itemQuantity:'',
-    category:''
-  }
+  // const itemInitialValue = {
+  //   itemCode:'',
+  //   itemName:'',
+  //   itemPrice:'',
+  //   itemQuantity:'',
+  //   category:''
+  // }
 
 function Add({setIsAdding}) {
 
-  const [addItem,setAddItem] = useState(itemInitialValue);
+  const [addItem,setAddItem] = useState({});
 
   const onInputChange = (e)=>{
     setAddItem({...addItem,[e.target.name]:e.target.value});

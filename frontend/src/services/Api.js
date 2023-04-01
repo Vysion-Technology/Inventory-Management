@@ -13,6 +13,16 @@ export const addProduct = async (product) => {
     }
 }
 
+export const addUseProduct = async (product) => {
+    try{
+        return await axios.post(`${url}/useProducts`,product);
+        // const myData = json.stringify(data);
+        // return myData;
+    }catch(error){
+        console.log("error while calling api",error.message);
+    }
+}
+
 export const getProduct = async () => {
     try{
         const response = await axios.get(`${url}/getProducts`);

@@ -1,11 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 import Layout from './layout/Layout.js';
 import Home from './views/home/Home.js';
 import Consumable from './views/page/Consumable.js';
 import Nonconsumable from './views/page/Nonconsumable.js';
 import Services from './views/page/Services.js';
-
+import Report from './layout/components/Report';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route exact path="/Services">
               <Services />
             </Route>
+            <Route exact path="/report" component={Report}/>
           </Switch>
         </Layout>
       </div>

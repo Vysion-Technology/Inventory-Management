@@ -14,4 +14,19 @@ export const getItemReducer =(state={items: []},action)=>{
         default:
             return state;
     }
-} 
+}
+
+export const usedItemReducer =(state={items: []},action)=>{
+    switch(action.type){
+        case actionType.GET_USE_PRODUCT_SUCCESS:
+            return {
+                items:action.payload
+            }
+        case actionType.GET_USE_PRODUCT_FAIL:
+            return {
+                error:action.payload
+            }
+        default:
+            return state;
+    }
+}
